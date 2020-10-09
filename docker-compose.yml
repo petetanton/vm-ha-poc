@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  vminsert:
+    build: .
+    entrypoint: /bin/vminsert-prod -storageNode vmstore_1:8400 -storageNode vmstore_2:8400
+    ports:
+      - '8480:8480'
+  vmselect:
+    build: .
+    entrypoint: /bin/vmselect-prod -storageNode vmstore_1:8401 -storageNode vmstore_2:8401
+    ports:
+      - '8481:8481'
+  vmstore_1:
+    build: .
+    entrypoint: /bin/vmstorage-prod
+    ports:
+      - '8400:8400'   # store
+      - '8401:8401'  #select
+  vmstore_2:
+    build: .
+    entrypoint: /bin/vmstorage-prod
+    ports:
+      - '8403:8400'   # store
+      - '8404:8401'  #select
+volumes:
+  logvolume01: {}
